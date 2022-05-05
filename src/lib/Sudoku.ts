@@ -175,9 +175,12 @@ export class Sudoku {
 
   randomPosition = () => Math.floor(Math.random() * 81);
 
-  generate = (noOfTilesToShow = 20): number[] => {
+  generate = (
+    noOfTilesToShow = 20
+  ): { solved: number[]; initial: number[] } => {
     let plain = new Array(81).fill(0);
-    let rando = this.solve(plain);
+    let solved = this.solve(plain);
+    let rando = [...solved];
     const noOfRequiredBlanks = 81 - noOfTilesToShow;
     let noOfBlanks = 0;
     while (noOfBlanks != noOfRequiredBlanks) {
@@ -188,7 +191,7 @@ export class Sudoku {
       rando[randomPlace] = 0;
       noOfBlanks++;
     }
-    return [...rando];
+    return { solved, initial: [...rando] };
   };
 
   solve = (sudoku) => {

@@ -1,52 +1,41 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
-import { EditableCell } from "../components/EditableCell";
-import { Sudoku } from "../lib/Sudoku";
-const Index = () => {
-  const [board, setBoard] = useState<number[]>([]);
-  const [initialBoard, setInitialBoard] = useState<number[]>([]);
+import { SudokuBoard } from "../components/SudokuBoard";
 
-  const handleSolve = () => {
-    const sudoku = new Sudoku();
-    const solved = sudoku.solve([...board]);
-    setBoard([...solved]);
-  };
-
-  const handleReset = () => {
-    const sudoku = new Sudoku();
-    const newBoard = sudoku.generate(20);
-    setBoard([...newBoard]);
-    setInitialBoard([...newBoard]);
-  };
-
-  const handleCellValue = (rowIndex: number, value: number | "") => {
-    const newBoard = [...board];
-    newBoard[rowIndex] = value === "" ? 0 : value;
-    setBoard([...newBoard]);
+const SukoduPage = () => {
+  const [selectValue, setSelectValue] = useState(60);
+  const [numberOfRemainingValues, setNumberOfRemainingValues] = useState(0);
+  const handleNewGameClick = () => {
+    setNumberOfRemainingValues(selectValue);
   };
 
   return (
-    <div className="flex items-center justify-center h-screen w-screen antialiased">
-      <div className="shadow-2xl rounded-lg bg-gray-300 border-gray-900 flex flex-col justify-center border-2 w-96 p-4 space-y-4">
-        {board.length > 0 && (
-          <div className="grid grid-cols-9 border-2 text-xl border-slate-900 ">
-            {board.map((cell, rowIndex) => (
-              <EditableCell
-                key={rowIndex}
-                isReadOnly={initialBoard[rowIndex] !== 0}
-                rowIndex={rowIndex}
-                value={cell !== 0 ? cell : ""}
-                onValueChange={(value) => handleCellValue(rowIndex, value)}
-              />
-            ))}
-          </div>
-        )}
-        <div className="flex gap-4 justify-center">
-          {board.length > 0 && <Button onClick={handleSolve}>Solve</Button>}
-          <Button onClick={handleReset}>Reset</Button>
-        </div>
+    <div className="flex flex-col items-center justify-center h-screen w-screen antialiased gap-2">
+      <div className="shadow-2xl rounded-lg bg-gray-300 border-gray-900 flex items-center justify-start border-2 w-96 p-4 gap-4">
+        <label htmlFor="game-level" className="font-semibold">
+          Level
+        </label>
+        <select
+          value={selectValue}
+          onChange={(e) => setSelectValue(parseInt(e.target.value))}
+          id="game-level"
+          className="flex-1 py-1  relative w-full bg-white border border-gray-300 rounded-md pl-2 pr-10 text-left focus:outline-none focus:ring-1 hover:ring-blue-600 focus:border-blue-600 sm:text-sm"
+        >
+          <option value="60">Easy</option>
+          <option value="40">Medium</option>
+          <option value="20">Hard</option>
+        </select>
+        <button
+          className="px-2 py-1 border-0 outline-none ring disabled:ring-0 hover:ring-blue-600 font-bold disabled:hover:bg-gray-400 bg-gray-400 hover:bg-gray-600 hover:text-white duration-300  disabled:text-gray-600"
+          onClick={handleNewGameClick}
+        >
+          New
+        </button>
       </div>
+      {numberOfRemainingValues !== 0 ? (
+        <SudokuBoard levelCount={numberOfRemainingValues} />
+      ) : null}
     </div>
   );
 };
-export default Index;
+export default SukoduPage;
