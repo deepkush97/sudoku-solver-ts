@@ -18,7 +18,7 @@ export const Button: FunctionComponent<ButtonProps> = ({
 }) => {
   return (
     <button
-      className="px-3 py-2 my-2 border-0 outline-none ring disabled:ring-0 hover:ring-blue-600 font-bold disabled:hover:bg-gray-400 bg-gray-400 hover:bg-gray-600 hover:text-white duration-300  disabled:text-gray-600"
+      className="px-2 py-1 border-0 rounded-md outline-none ring disabled:ring-0 hover:ring-blue-600 font-bold disabled:hover:bg-gray-400 bg-gray-400 hover:bg-gray-600 hover:text-white duration-300 disabled:text-gray-600"
       onClick={onClick}
       disabled={disabled}
     >

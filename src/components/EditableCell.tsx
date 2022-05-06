@@ -4,6 +4,7 @@ interface EditableCellProps {
   isReadOnly: boolean;
   rowIndex: number;
   value: number | "";
+  isWrong: boolean;
   onValueChange: (value: number | "") => void;
 }
 
@@ -12,6 +13,7 @@ export const EditableCell: FC<EditableCellProps> = ({
   isReadOnly,
   value,
   onValueChange,
+  isWrong,
 }) => {
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.currentTarget.value != "") {
@@ -31,7 +33,11 @@ export const EditableCell: FC<EditableCellProps> = ({
       onKeyDown={(evt) => evt.key === "e" && evt.preventDefault()}
       disabled={isReadOnly}
       className={` text-center border ${
-        isReadOnly ? " font-semibold bg-gray-400  select-none" : "bg-gray-100"
+        isReadOnly
+          ? " font-semibold bg-gray-400  select-none"
+          : isWrong
+          ? "bg-red-200"
+          : "bg-gray-100"
       }  border-slate-900 p-1 outline-none ${generateBorderForCell(rowIndex)}`}
     ></input>
   );

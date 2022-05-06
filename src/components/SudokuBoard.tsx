@@ -4,7 +4,11 @@ import { EditableCell } from "./EditableCell";
 import { Sudoku } from "../lib/Sudoku";
 import { SUDOKU_STATE } from "../lib/SudokuState";
 
-export const SudokuBoard: FC<{ levelCount: number }> = ({ levelCount }) => {
+export const SudokuBoard: FC<{
+  levelCount: number;
+  hintRequired: boolean;
+  updateScore: (score: number) => void;
+}> = ({ levelCount, hintRequired, updateScore }) => {
   const [board, setBoard] = useState<number[]>([]);
   const [initialBoard, setInitialBoard] = useState<number[]>([]);
   const [solvedBoard, setSolvedBoard] = useState<number[]>([]);
@@ -15,7 +19,7 @@ export const SudokuBoard: FC<{ levelCount: number }> = ({ levelCount }) => {
     if (typeof window !== "undefined") {
       handleReset();
     }
-  }, [levelCount]);
+  }, [levelCount, hintRequired]);
 
   useEffect(() => {
     if (
@@ -55,6 +59,15 @@ export const SudokuBoard: FC<{ levelCount: number }> = ({ levelCount }) => {
 
       case SUDOKU_STATE.SOLVED:
         setMessage("Congratulations, you're awesome, you solved the sudoku.");
+        updateScore(
+          levelCount === 60
+            ? 50
+            : levelCount === 40
+            ? 100
+            : levelCount === 20
+            ? 200
+            : 0
+        );
         setEndOfGame(true);
         break;
 
@@ -93,6 +106,7 @@ export const SudokuBoard: FC<{ levelCount: number }> = ({ levelCount }) => {
           {board.map((cell, rowIndex) => (
             <EditableCell
               key={rowIndex}
+              isWrong={cell !== 0 && cell !== solvedBoard[rowIndex]}
               isReadOnly={initialBoard[rowIndex] !== 0}
               rowIndex={rowIndex}
               value={cell !== 0 ? cell : ""}
@@ -101,17 +115,20 @@ export const SudokuBoard: FC<{ levelCount: number }> = ({ levelCount }) => {
           ))}
         </div>
       )}
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-4 justify-center pt-2">
         {board.length > 0 && (
           <Button onClick={handleSolve} disabled={endOfGame}>
             Solve
           </Button>
         )}
-        <Button onClick={handleReset}>Reset</Button>
+        <Button onClick={handleReset}>Next</Button>
       </div>
-      <div className="flex gap-4 justify-center">
-        <span className="font-semibold text-xs text-center">{message}</span>
-      </div>
+
+      {(hintRequired || endOfGame) && (
+        <div className="flex gap-4 justify-center">
+          <span className="font-semibold text-xs text-center">{message}</span>
+        </div>
+      )}
     </div>
   );
 };
