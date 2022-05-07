@@ -100,9 +100,9 @@ export const SudokuBoard: FC<{
   };
 
   return (
-    <div className="shadow-2xl rounded-lg bg-gray-300 border-gray-900 flex flex-col justify-center border-2 w-96 p-4 space-y-2">
+    <div className="flex flex-col justify-center md:w-96 gap-4">
       {board.length > 0 && (
-        <div className="grid grid-cols-9 border-2 text-xl border-slate-900 ">
+        <div className="grid grid-cols-9 border-2 md:text-lg border-slate-900 ">
           {board.map((cell, rowIndex) => (
             <EditableCell
               key={rowIndex}
@@ -125,7 +125,7 @@ export const SudokuBoard: FC<{
       </div>
 
       {(hintRequired || endOfGame) && (
-        <div className="flex gap-4 justify-center">
+        <div className="flex justify-center">
           <span className="font-semibold text-xs text-center">{message}</span>
         </div>
       )}

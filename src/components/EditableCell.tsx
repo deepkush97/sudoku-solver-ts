@@ -38,7 +38,7 @@ export const EditableCell: FC<EditableCellProps> = ({
           : isWrong
           ? "bg-red-200"
           : "bg-gray-100"
-      }  border-slate-900 p-1 outline-none ${generateBorderForCell(rowIndex)}`}
+      }  border-slate-900 py-2 outline-none ${generateBorderForCell(rowIndex)}`}
     ></input>
   );
 };
